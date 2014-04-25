@@ -42,14 +42,30 @@ This is an abstract.
 
 We extracted data from the two strongest-field magnetars, SGR 1806-20 and SGR 1900+14, observed with the Proportional Counter Array (PCA) onboard the {\it Rossi} X-ray Timing Explorer (RXTE). SGR 1806-20 was observed during an active period in 1998 (observation IDs 20165 and 10223), SGR 1900+14 during an active period in 1996 (observation ID 30410). 
 
-[Lucy insert data processing here.]
+[Lucy inserts data processing here.]
 
+We use burst start times and durations ($T_{90}$ i.e. the time around the peak count rate in which 90\% of all photons arrive at the detector) from \citet{gogus1999} and \citet{gogus2000}. 
 
 
 \section{Analysis Methods}
 \label{sec:analysis}
 
+Magnetar bursts, by their very nature, have a well-defined start and end. From this immediately follows that they are non-stationary processes and, as such, require special care when performing Fourier analysis - a decomposition into stationary sine functions - on their light curves. 
+Here, we use the Bayesian periodogram methods described in \citet{Huppenkothen13} to deal with the effects of non-stationarity at low frequencies. 
+
+
 \subsection{Simulating Light Curves with Few Photons}
+
+As a first step, we simulate simple, stationary (flat) light curves with similar characteristics as the observed bursts: short duration ($T_{90} < 1 \, \mathrm{s}$), high time resolution ($dt = 0.5/2048 \, \mathrm{s} = 2.44\times 10^{-4}$) and low numbers of photons (between 100 and 10000 photons per burst). 
+We produce a large number of simulated light curves for different values of the total number of photons per light curve, in order to test how a low photon count rate affects the periodogram. We space the total photon count $N_{\mathrm{tot}}$ logarithmically, and simulate for $N_{\mathrm{tot}} = [100, 200, 500, 1000, 2000, 5000, 10000]$ in the following way, keeping all other parameters (e.g. burst duration and time resolution) the same:
+
+(1) For a given total number of photons, we compute the expected number of counts per time bin. 
+(2) We simulate $n_{\mathrm{sim}} = 10000$ light curves from the computed count rate by picking from a Poisson distribution with a mean equal to the count rate for each time bin. For low count rates, this will result in a large number of bins with no photons. The integrated number of photons in each light curve will not be $N_{\mathrm{tot}}$ exactly, but fall on a distribution around that value.
+(3) For each simulated light curve, we create the periodogram and pick the maximum of the resulting powers. We then bin the periodogram at different bin factors representative of those chosen for the SGR burst light curves ($b = [1, 5, 10, 20, 50]$). Again, from each periodogram, we pick the highest power.
+(4) In order to compare the distribution of maximum powers with theoretical predictions, we simulate the same number of powers as in the unbinned and binned periodograms created in (3) from a $\Chi^2$-distribution with $2$ degrees of freedom, $P \sim \Chi^2_2$, as expected for periodograms of pure white noise (flat, Poisson-distributed light curve). For the binned periodograms, the powers are still distributed as a $\Chi^2$-distribution, now with $2b$ degrees of freedom, and scaled by b: $P \sim \Chi^2_{2b}/b$.
+(5) Finally, we compare the resulting distributions of maximum powers from the theoretically expected distributions and the distributions of maximum powers from the periodograms derived from simulated light curves using a 2-sided Kolmogorov-Smirnov test. 
+
+
 
 \subsection{Light Curve Simulations of Candidate Detections}
 
