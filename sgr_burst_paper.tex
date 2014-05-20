@@ -10,6 +10,7 @@
 %\usepackage{siunitx}
 %\let\siunitx\relax
 \newcommand{\com}[1]{\noindent\textcolor{red}{#1}}
+\newcommand{\hz}{\,\mathrm{Hz}}
 \shorttitle{Timing analysis of SGR J1550-5418}
 \shortauthors{Huppenkothen et al.}
 
@@ -42,40 +43,131 @@ This is an abstract.
 
 We extracted data from the two strongest-field magnetars, SGR 1806-20 and SGR 1900+14, observed with the Proportional Counter Array (PCA) onboard the {\it Rossi} X-ray Timing Explorer (RXTE). SGR 1806-20 was observed during an active period in 1998 (observation IDs 20165 and 10223), SGR 1900+14 during an active period in 1996 (observation ID 30410). These active periods were chosen both for the large number of bursts within a relatively small time interval, as well as for the quality of the observations, with all five detector units (PCUs) in operation for most of the bursts, which allows us to detect even weak bursts.
 
-The RXTE data was extracted from observations taken in Good Xenon and Event modes. Events were extracted from channels covering the 2-60 keV energy range at the instrinsic binsize provided by the observation mode, which is 1 $\mu$s for Good Xenon mode and 125 $\mu$s for the Event modes.  
+The RXTE data was extracted from observations taken in Good Xenon and Event modes. Events were extracted from channels covering the 2-60 keV energy range at the intrinsic bin size provided by the observation mode, which is 1 $\mu$s for Good Xenon mode and 125 $\mu$s for the Event modes.  
  
-We use burst start times and durations ($T_{90}$ i.e. the time around the peak count rate in which 90\% of all photons arrive at the detector) from \citet{gogus1999} and \citet{gogus2000}. 
+We use burst start times and durations ($T_{90}$ i.e. the time around the peak count rate in which 90\% of all photons arrive at the detector) from \citet{gogus1999} and \citet{gogus2000} [ERSIN: Could you write a sentence or two on the burst extraction and selection?]. 
 
 Following \citet{zhang1995} and \citet{jahoda2006}, we correct the periodograms of the bursts for dead time effects. Dead time occurs when the X-ray detector is momentarily unresponsive after a photon impinged on it. In RXTE, there are two main types of dead time: (1) dead time after arrival of a photon, where the channel in which the photon arrived is paralysed for $10\mu\mathrm{s}$, and (2) dead time after a very large events (VLE), a photon with an energy much higher than the dynamic range of the detector, which saturates the amplifier. The latter paralyses the detector for $170\mu\mathrm{s}$. While both effects operate on very short timescales, much shorter than the timescales of interest here, the resulting loss of photons modifies the distribution of photon arrivals away from a Poisson distribution, and consequently also modifies the distribution of powers in the periodogram. Note that dead time depends very strongly on count rate: the brighter a source, the stronger the effect on the periodogram. Thus, dead time corrections are especially important for the brightest bursts, however, since the effects become appreciable even at moderate count rates of $\sim 2000 \,\mathrm{counts}\,\mathrm{s}^{-1}$, virtually all bursts need to be corrected. We use equations (10) and (13) of \citet{jahoda2006} to correct for dead time. The corrections are defined per PCU, whereas we use light curves combined from all active units in our analysis. Thus, the given normalisation constants are incorrect; we fit for these constants using a Maximum Likelihood approach, and correct for the resulting deviation in both noise level and periodogram shape. 
 
-\subsection{Averaging Bursts}
 
-We construct averaged periodograms from bursts that are close together in time, in order to test the hypothesis that a QPO could be persist for hundreds of seconds, or else be re-excited in consecutive bursts at a comparable frequency. Additionally, averaging periodograms from different bursts can drastically increase the signal-to-noise ratio, if a signal persists across bursts. We compute waiting times between burst start times, i.e. the time interval between consecutive bursts. Note that for bursts separated by an unobserved time period, this time interval is very long. All bursts with a waiting times of less than $500$ seconds between consecutive bursts are then grouped together in clusters. This number is chosen such that we do not create stretches that cross observations, while also creating clusters of bursts large enough to allow for averaging. Within each cluster, we pick the burst with the largest burst $T_{90}$ duration, and construct light curves for all bursts in the cluster with that duration. This allows us to create periodograms with the same number of frequencies, which are consequently easier to average. For the following analysis, we choose all clusters with at least 30 bursts, to allow for a high signal-to-noise ratio.
-For SGR 1900+14, we create 15 clusters in this way, containing between $6$ and $69$ bursts each. These clusters have durations (from the first burst in the cluster to the last) between $775$ and $3257$ seconds, longer than the instrument-imposed maximum duration of a cluster of $330 \, \mathrm{s}$ for our previous analysis of {\it Fermi} Gamma-Ray Burst Monitor (GBM) data of SGR J1550-5418 \citep{huppenkothen14}. Eight of these clusters have more than $30$ bursts, which we subsequently combine to produce 8 periodograms, with the smallest sample averaged over $38$ bursts, the largest averaged over $75$ bursts.
-%%% ADD BIT FOR SGR 1900+14 AVERAGED BURSTS
-
-\section{Analysis Methods}
+\section{Power Spectral Searches}
 \label{sec:analysis}
 
 Magnetar bursts, by their very nature, have a well-defined start and end. From this immediately follows that they are non-stationary processes and, as such, require special care when performing Fourier analysis - a decomposition into stationary sine functions - on their light curves. Note that stationarity does not imply a constant light curve: it merely implies that the variance in the light curve over any given time interval must be the same as over any other interval. 
 Here, we use the Bayesian periodogram methods described in \citet{huppenkothen13} to deal with the effects of non-stationarity at low frequencies. In short, we compute the periodogram of a light curve with a high time resolution, here $dt = 0.5/2048 = 2.44 \times 10^{-4} \, \mathrm{s}$, which allows us to search up to a Nyquist frequency of $\nu_{\mathrm{Nyquist}} = 2048 \, \mathrm{Hz}$. For light curves that obey stationarity over the time scales of interest, standard Fourier methodology applies, and the statistical distributions of the resulting power spectra are well known. The bursty nature of our light curves introduces high variance at long time scales, correspondingly the periodogram shows high power at low frequencies. We model this power with an empirical function; experience has shown that simple or broken power laws can model a large range of burst phenomena. Consequently, we perform two tasks: (1) a model selection task, to ascertain whether the periodogram may be represented by a simple power law, or requires a more complex model; (2) a QPO search task, where we compare the maximum powers of a large number of simulations to the maximum power after dividing out the best-fit broadband model in the observed periodogram. For the model selection task, we fit the periodogram with both a simple and a broken power law and compute the likelihood ratio. We then sample from the posterior distribution of the simpler model via Markov Chain Monte Carlo, and simulate periodograms from draws of that posterior distribution. These periodograms are again fit with both models, such that we can build a distribution of likelihood ratios for realisations of the simpler model. This allows us to compute a posterior p-value, such that we can accept or reject the simple model. Here, we use a fairly conservative strategy and set the rejection threshold at $p = 0.05$, such that we prefer to over-fit the broadband noise, rather than mis-attribute noise components as a QPO.
 In the second step, we draw from the posterior distribution of the model chosen in the model selection step, again via MCMC, and create a large number of simulated periodograms from these draws. We fit each periodogram with the preferred model, and find the highest data/model outlier. We can then compare the distribution of data/model outliers as derived from the simulations of broadband noise only with the highest data/model outlier in the observed periodogram. If the observed value is very unlikely given p-value derived from these simulations, one may say with relative confidence that we have detected a QPO at the frequency of the highest data/model outlier in the data. Note that while this approach automatically corrects for the fact that we have searched over a broad range of frequencies, we still need to correct for the fact that we also have searched over a large number of bursts: the more frequencies or bursts one searches, the likelier it becomes to see an outlier purely by chance. 
 
+It is important to note that the analysis presented above makes a strong assumption about the data: our choice of a $\chi^2$-distributed likelihood around the model power spectrum implies that the periodogram is the result of a pure, stationary noise process. This is not strictly true, but as shown in \citet{huppenkothen13}, it is a conservative assumption that holds for all but the lowest frequencies in the periodogram. At high enough frequencies, where the shape of the periodogram is effectively hidden by noise, the method becomes equivalent to the standard tests against a $\chi^2$ distribution with two degrees of freedom for an unbind periodogram, as described for example in \citet{vanderklis1989}.
+
 For details on the analysis procedure, including extensive simulations on simulated bursts, as well as the limitations of the method, see \citet{huppenkothen13} and \citet{vaughan2010}.
 
+\subsection{Individual Burst Search}
+\label{sec:psd_individual}
 
-\subsection{Simulating Simple Light Curves}
-\label{sec:analysis_lcsims}
-As a first step, we simulate simple, stationary (flat) light curves with similar characteristics as the observed bursts: short duration ($T_{90} < 1 \, \mathrm{s}$), high time resolution ($dt = 0.5/2048 \, \mathrm{s} = 2.44\times 10^{-4} \, \mathrm{s}$) and low numbers of photons (between 100 and 10000 photons per burst). 
-We produce a large number of simulated light curves for different values of the total number of photons per light curve, in order to test how a low photon count rate affects the periodogram. We space the total photon count $N_{\mathrm{tot}}$ logarithmically, and simulate for $N_{\mathrm{tot}} = [100, 200, 500, 1000, 2000, 5000, 10000]$ in the following way, keeping all other parameters (e.g. burst duration and time resolution) the same:
+%%% NEED SOME TEXT HERE
+
+\begin{figure*}[htbp]
+\begin{center}
+\includegraphics[width=18cm]{sgr1900_burst_example.png}
+\caption{Light curve (left) and binned periodogram (right) of a single burst observed from SGR 1900+14. The burst has very few photons ($N_{\mathrm{photons}} = 162$), and is representative of the sample. The periodogram shows a strong, frequency-dependent modulation across the entire frequency range, with the strongest signal at [GET OUT FREQUENCY] with a very high significance ($p = 3.19 \times 10^{-18}$, single trial). Given that the periodogram deviates strongly from the distributions we test against, it is unclear whether this peak in the periodogram corresponds to a true QPO signal.}
+\label{fig:psd_individual_example}
+\end{center}
+\end{figure*}
+
+
+
+
+\subsection{Averaged Periodograms}
+\label{sec:psd_average}
+We construct averaged periodograms from bursts that are close together in time, in order to test the hypothesis that a QPO could be persist for hundreds of seconds, or else be re-excited in consecutive bursts at a comparable frequency. Additionally, averaging periodograms from different bursts can drastically increase the signal-to-noise ratio, if a signal persists across bursts. We compute waiting times between burst start times, i.e. the time interval between consecutive bursts. Note that for bursts separated by an unobserved time period, this time interval is very long. All bursts with a waiting times of less than $500$ seconds between consecutive bursts are then grouped together in clusters. This number is chosen such that we do not create stretches that cross observations, while also creating clusters of bursts large enough to allow for averaging. Within each cluster, we pick the burst with the largest burst $T_{90}$ duration, and construct light curves for all bursts in the cluster with that duration. This allows us to create periodograms with the same number of frequencies, which are consequently easier to average. For the following analysis, we choose all clusters with at least 30 bursts for SGR 1900+14, and all clusters with at least 20 bursts for SGR 1806-20, to account for the intrinsically lower number of bursts in the latter sample, while preserving a high signal-to-noise ratio for both.
+For SGR 1900+14, we create 15 clusters in this way, containing between $6$ and $69$ bursts each. These clusters have durations (from the first burst in the cluster to the last) between $775$ and $3257$ seconds, longer than the instrument-imposed maximum duration of a cluster of $330 \, \mathrm{s}$ for our previous analysis of {\it Fermi} Gamma-Ray Burst Monitor (GBM) data of SGR J1550-5418 \citep{huppenkothen14}. Eight of these clusters have more than $30$ bursts, which we subsequently combine to produce 8 periodograms, with the smallest sample averaged over $38$ bursts, the largest averaged over $75$ bursts.
+For SGR 1806-20, we create 19 clusters with between 1 and 44 bursts and a total duration in each cluster $17$ and $3242$ seconds. We extract five clusters with between $20$ and $44$ bursts each. Note that the lower number of bursts averaged for SGR 1806-20 than SGR 1800+14 leads to a lower sensitivity for QPO detections in the former data set, as the inclusion of more bursts results in a higher signal-to-noise ratio in the final averaged periodogram.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=9cm]{envelope_burst_ps.png}
+\caption{Periodogram of an example burst from SGR 1900+14. The powers below $100 \hz$ clearly neither follow a $\chi^2$-distribution with $2$ degrees of freedom around the underlying power spectrum, as is the assumption for our analysis method, nor are neighbouring frequencies independent. The shape of the periodogram at low frequencies is the hallmark signature of a strong burst envelope - the overall shape of the burst - dominating the periodogram. We exclude bursts such as these from the averaged periodograms searched in Section \ref{sec:psd_average}, since aberrant PSD shapes like the strong feature at $\sim 60 \hz$ are not captured by our model, and can potentially dominate the averaged periodogram even when many bursts are included in the average.}
+\label{fig:envelope_example}
+\end{center}
+\end{figure}
+
+
+Our Bayesian QPO search algorithm finds candidate detections in $6$ averaged periodograms from SGR 1900+14, and $4$ in averaged periodograms from SGR 1806-20, at frequencies between $50 \hz$, the lower boundary of our search, and $1900 \hz$. Because of the deviations from the expected $\chi^2$-distribution described in Section \ref{sec:psd_individual}, we test whether these averaged periodograms could be dominated by power from a single burst, which would lead us to draw wrong conclusions about the averaged periodogram. For low-frequency candidate signals below $100 \hz$, we screen the periodograms of all individual bursts used to produce the averaged periodograms, and exclude those that are clearly dominated by the overall burst process below $100 \hz$ (see Figure \ref{fig:envelope_example} for an example). For high-frequency detections, we search the results of the single-burst QPO search for detections at the relevant frequencies in the bursts that make up the averaged periodograms, and exclude those where detections were found. 
+
+Even after exclusion of single bursts with strong features that might affect the results of the averaged periodograms, it is possible that the averaged periodograms are affected overall by the non-$\chi^2$-distributed features described in Section \ref{sec:psd_individual}: while it is possible that for periodograms of many individual bursts averaged together, these effects of non-independent powers and deviations from the expected statistical distributions may cancel out, however, we cannot assume so a priori. 
+In order to test the robustness of the remaining signals, we create averaged periodograms from random samples of bursts from each magnetar. For each averaged periodograms, we create $1000$ random samples of bursts from either SGR 1900+14 or SGR 1806-20, with the same number of bursts averaged as for the averaged periodogram in question. Note that the simulations created this way are not entirely statistically independent: for 1000 simulations, and between 20 and 80 bursts per averaged periodograms, individual bursts will be part of several simulations. Note that using these simulated periodograms, we can only test the hypothesis that a QPO could be long-lived, or re-excited in bursts that are temporally close, but we cannot test against the null hypothesis that there is no QPO: it is possible that a potential QPO signal could be randomly excited at the same frequency in many bursts, irrespective of whether they occur close together in time or not. In this case, a signal would appear insignificant with respect to the simulations, whereas it is simply present in many bursts. 
+
+At the same time, these simulations also allow us to test whether there could be problems with the underlying power spectrum of averaging many bursts. For our key assumption, a $\chi^2$-distributed random variable, to hold, the maximum powers in each averaged periodogram derived from random samples of bursts should be uniformly distributed across the entire frequency regime. If this is not true, if in fact many averaged periodograms cluster at specific frequencies, this could indicate problems with the underlying assumption, and thus be evidence against a QPO at a given frequency.
+
+After testing both those periodograms with the most prominent burst profiles taken out, as well as testing against distributions of randomly sampled bursts, we find only one significant signal remains: in an average of $30$ bursts observed from SGR 1806-20, we find a significant detection (Bayesian p-value $p < 10^{-4}$, from random samples of bursts $p = 10^{-3}$, corrected for the number of frequencies searched) at $57 \hz$, with an estimated width of $4.4 \hz$. Interestingly, this QPO is close in both frequency and width to a QPO observed in the 1998 giant flare from SGR 1900+14, which had a frequency of $53\hz$ and a width of $5\hz$. This QPO is at a frequency where many averaged periodograms from individually averaged bursts show their maximum power as well. While this signal is not an outlier with respect to the frequency distribution, it is an outlier in terms of its power, and is thus more likely to be due to an actual QPO.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=9cm]{frequency_dist_example.png}
+\caption{Distribution of frequencies of maximum powers for $1000$ averaged periodograms from randomly sampled sets of $30$ bursts each for SGR 1806-20. The averaged periodograms were fit with a broken power law, and the maximum power as well as the frequency of that power extracted from the data/model residuals. It is clear that the distribution of frequencies is not uniform: there are high peaks at frequencies where excess power preferentially occurs.  Here, we show an example where the frequency was averaged to $\sim 2 \hz$, however, the observed distributions are stable across a large range in frequency resolutions.}
+\label{fig:psd_avg_freqdist}
+\end{center}
+\end{figure}
+
+
+We note that all other potential QPOs flagged as significant by our Bayesian algorithm are not significant when comparing to randomly sampled bursts. We also note that the distribution of frequencies of maximum powers extracted from average periodograms of randomly sampled bursts is highly non-uniform (see Figure \ref{fig:psd_avg_freqdist} for an example): there are well-defined peaks in the frequency distribution. For SGR 1806-20, the three highest peaks are at $50 - 90 \hz$, $980 - 1020 \hz$ and $1550 - 1590 \hz$; for SGR 1900+14, the peaks are at $80 - 120 \hz$, $1140 - 1180 \hz$, and $1400 - 1440 \hz$. It is unclear which underlying process creates these non-uniform distributions. There could, of course, be QPOs at these frequencies that are continuously excited and re-excited. However, especially low-frequency features are very sensitive to the broadband noise model: at these frequencies, the power spectrum of the burst itself often supplies significant amounts of power, distorting both the shape and the statistical distributions of the resulting periodogram. Similarly, we have shown in Section \ref{sec:psd_individual} that the statistical distributions of powers are not statistically distributed following the expected $\chi^2$ distribution in the individual burst periodograms, even at high frequencies, and that neighbouring frequencies are often correlated. It is thus possible that the averaged periodograms show an accumulated version of these irregularities: the frequency distribution would then be reminiscent of relevant time scales in the burst, which need not necessarily be related to periodic or quasi-periodic processes. With current methods, it is impossible to distinguish between those two alternatives; we therefore restrict us to only report the one QPO in SGR 1806-20 that is an outlier both with respect to the theoretically expected distributions for an averaged periodogram and with respect to randomly sampled bursts.
+
+\begin{deluxetable*}{lcccccc|ccccc}
+\label{tab:avgrms}
+\tablewidth{500pt}
+\tablecolumns{6}
+\tablecaption{Results of the QPO search for averaged periodograms}
+\tablehead{
+\colhead{Observation ID} &
+\colhead{$N_{\mathrm{bursts}}$} &
+\colhead{$t_0$ [MET]}&
+\colhead{min $T_{90}$ [s]} &
+\colhead{max $T_{90}$ [s]} &
+\colhead{$\nu_0$ [Hz]} &
+\colhead{$\Delta\nu$ [Hz]} &
+\colhead{posterior} &
+\colhead{simulated}\\
+\colhead{} &
+\colhead{} &
+\colhead{} &
+\colhead{} &
+\colhead{} &
+\colhead{} &
+\colhead{$p$-value} &
+\colhead{$p$-value}}
+ \startdata
+ 10223-01-03-010 	&	30	&	90907122.0225 	& 	0.064	&	4.84		&	57	&	4.4	&	$<10^{-4}$	&	$10^{-3}$ \\
+ %%% CONTINUE TABLE
+ 
+ \enddata
+ \tablecomments{This table summarises the results from the averaged periodograms of both SGR 1806-20 and SGR 1900+14. }
+\label{tab:psd_avg_results}
+\end{deluxetable*}
+
+
+\section{Burst Periodograms in the Low-Noise Limit}
+
+While observations of magnetar bursts with RXTE suffer from less noise than those made with Fermi/GBM, the integrated number of photon counts over a burst is a factor of $10$ lower than for GBM. This means we are searching QPOs in the limit of low photon counts; the low number of photons can have an appreciable effect on the overall statistics. One effect may be a deviation from the expected statistical distributions, even at high frequencies. We thus explore the regime where this deviation becomes important via simulations of light curves with low photon counts, both of simple flat Poisson noise as well as of bursts.
+The overall simulation strategy is as follows:
 
 (1) For a given total number of photons, we compute the expected number of counts per time bin. 
-(2) We simulate $n_{\mathrm{sim}} = 10000$ light curves from the computed count rate by picking from a Poisson distribution with a mean equal to the count rate for each time bin. For low count rates, this will result in a large number of bins with no photons. The integrated number of photons in each light curve will not be $N_{\mathrm{tot}}$ exactly, but fall on a distribution around that value.
-(3) For each simulated light curve, we create the periodogram and pick the maximum of the resulting powers. We then bin the periodogram at different bin factors representative of those chosen for the SGR burst light curves ($b = [1, 5, 10, 20, 50]$). Again, from each periodogram, we pick the highest power.
+(2) We simulate $n_{\mathrm{sim}} = 10000$ light curves from the computed count rate either by picking from a Poisson distribution with a mean equal to the count rate for each time bin, or by normalising a burst shape such that the integrated number of photons will be distributed around the expected number of counts. For low count rates, this will result in a large number of bins with no photons. The integrated number of photons in each light curve will not be $N_{\mathrm{tot}}$ exactly, but fall on a distribution around that value.
+(3) For each simulated light curve, we create the periodogram and pick the maximum of the resulting powers above $1000 \hz$. The high cut-off frequency ensures that we do not accidentally include any of the low-frequency, power-law-like variability in our estimates. We then bin the periodogram at different bin factors representative of those chosen for the SGR burst light curves ($b = [1, 5, 10, 20, 50]$). Again, from each periodogram, we pick the highest power above $1000 \hz$.
 (4) In order to compare the distribution of maximum powers with theoretical predictions, we simulate the same number of powers as in the unbinned and binned periodograms created in (3) from a $\chi^2$-distribution with $2$ degrees of freedom, $P \sim \chi^2_2$, as expected for periodograms of pure white noise (flat, Poisson-distributed light curve). For the binned periodograms, the powers are still distributed as a $\chi^2$-distribution, now with $2b$ degrees of freedom, and scaled by b: $P \sim \chi^2_{2b}/b$.
-(5) Finally, we compare the resulting distributions of maximum powers from the theoretically expected distributions and the distributions of maximum powers from the periodograms derived from simulated light curves by computing the $99\%$ upper quantile of the distribution, and comparing this to the $99\%$ upper quantile expected for a $\chi^2$ distribution. Ideally, the difference between those two quantiles should be zero. For positive differences, the distribution of maximum powers is shifted towards higher power for the simulations, resulting in likely spurious detections. 
+(5) Finally, we compare the resulting distributions of maximum powers from the theoretically expected distributions and the distributions of maximum powers from the periodograms derived from simulated light curves by computing the $99\%$ upper quantile of the distribution, and comparing this to the $99\%$ upper quantile expected for a $\chi^2$ distribution. Ideally, the difference between those two quantiles should be zero. For positive differences, the distribution of maximum powers is shifted towards higher power for the simulations, resulting in likely spurious detections. For negative values, the distribution of maximum powers from the simulations of light curves is shifted towards lower powers compared to a $\chi^2$ distribution, potentially resulting in missed QPO detections.
 
 
+\subsection{Flat Light Curves}
+\label{sec:analysis_lcsims}
+As a first step, we simulate simple, stationary (flat) light curves with similar characteristics as the observed bursts: short duration ($T_{90} < 1 \, \mathrm{s}$), high time resolution ($dt = 0.5/2048 \, \mathrm{s} = 2.44\times 10^{-4} \, \mathrm{s}$) and low numbers of photons (between 100 and 10000 photons per burst). 
+We produce a large number of simulated light curves for different values of the total number of photons per light curve, in order to test how a low photon count rate affects the periodogram. We space the total photon count $N_{\mathrm{tot}}$ logarithmically, and simulate for $N_{\mathrm{tot}} = [100, 200, 500, 1000, 2000, 5000, 10000]$, keeping all other parameters (e.g. burst duration and time resolution) the same.
+
+For flat light curves, the resulting distributions are close to a $\chi^2$ distribution with two degrees of freedom, and remain this way even for low photon counts. The difference in $99\%$ quantiles between the simulated powers and the expected distribution range from $-0.7$ to $+0.25$, with the difference asymptotically approaching $0$ when averaging neighbouring frequency bins.
+This indicates that a few photons alone are not enough to make the resulting periodogram deviate significantly from the expected distribution.
+
+\subsection{Simulated Burst Light Curves}
+\label{sec:weakburstsims}
+Since a low number of photons alone does not explain the observed deviations from the theoretically expected distribution, we instead simulate simple, single-peaked bursts similar to those observed from SGR 1806-20 and SGR 1900+14 with RXTE.
 Simulating a burst adds additional parameters to the model. We model a burst as a single spike of the form
 
 \begin{equation}
@@ -86,52 +178,34 @@ Simulating a burst adds additional parameters to the model. We model a burst as 
 where $A$ is the amplitude of a spike, $\sigma$ the rise time, $t_\mathrm{max}$ the location in time of the spike maximum, and $s$ a skewness parameter that sets how the decay time is stretched ($s > 1$) or contracted ($s < 1$) compared to the rise time. 
 For our exploratory analysis here, we restrict ourselves to testing the effect of three parameters in a single-spiked burst: a sharp rise or drop in the light curve (parametrised by varying the rise time of the burst), a change in amplitude, and a change in background count rate. For each combination of rise time, amplitude and background count rate, we simulate $n_{\mathrm{sim}} = 10000$  light curves by picking from a Poisson distribution, as done in step (2) above, repeat steps (3) to (5) for these simulations as well. 
 
+We vary the rise time from $0.001 \, \mathrm{s}$ to $0.03 \, \mathrm{s}$, the background counts from $0.001$ counts per bin (corresponding to a background count rate of $\approx 5 \, \mathrm{counts}\, \,mathrm{s}^{-1}$) to $10$ counts per bin (corresponding to a count rate of $\approx 5 \times 10^{4}\, \mathrm{counts}\, \,mathrm{s}^{-1}$). The background for the PCA detector onboard of RXTE is approximately $20\, \mathrm{counts}\; \mathrm{s}^{-1}$ per detector, thus well within the range of simulated values.
+
+
+\begin{figure*}[htbp]
+\begin{center}
+\includegraphics[width=18cm]{weak_burst_sims.png}
+\caption{The deviations of the distribution of powers $>1000 \hz$ in simulated bursts in dependence of frequency binning, burst rise time, and background count rate. Here, we plot the difference in the $99\%$ quantile from distributions of simulated powers derived from 10000 simulated burst periodograms for each parameter set, versus the $99\%$ quantile of the theoretically expected distribution. We show the difference in quantiles for unbinned and binned powers, for various values of the burst rise time and background count rate. This difference provides an estimate of how likely we are to over- or under-estimate the significance of a given power when comparing to the theoretically expected distribution: for positive differences, the observed maximum power in a periodogram is derived from a distribution effectively shifted to the right of the theoretically expected distribution: we are likely to overestimate the significance of that maximum power. Conversely, a negative difference implies a shift of the distribution of powers to the left compared to the theoretically expected distribution, thus we are more likely to underestimate the significance of the observed maximum power in a given burst periodogram. The deviation of the $99\%$ quantile from the theoretical expectation depends strongly on both the rise time, which effectively sets the smallest time scales in the periodogram, as well as the background count rate. Note that we varied the amplitude of the burst as well, but omit a comparison between amplitudes here: a higher amplitude exacerbates the effect for bursts with a low background and a sharp rise.}
+\label{fig:weak_bursts}
+\end{center}
+\end{figure*}
+
+
+We find that the deviations from the theoretically expected statistical distribution of powers in many burst periodograms arises from a combination of factors: it seems like the low background conspires with sharp rises to create visible features even at high frequencies. This is unsurprising: the sharper the rise, the shorter are the time scales that the Fourier transform decomposes. Correspondingly, the strongest effects are observed for a short rise time, $t_{\mathrm{rise}} = 10^{-3}\,\mathrm{s}$. In a data stream with significant background photon counts, the resulting deterministic structures in the power spectrum are hidden underneath the noise. For RXTE data, this is not true: even above $1000\hz$, the periodogram is dominated by structures that arise from the burst itself, even when that burst is a simple, single-peaked structure without any QPO-like features. The effect is strongest for bursts with the weakest background and the sharpest rise times. Our simulations indicate that an increase in amplitude exacerbates the effect: a stronger burst, for the same rise time, automatically implies a sharper rise, thus increasing the power at high frequencies. The effect shifts the distribution of powers almost always to a higher power, and comparisons of observed powers with the theoretically expected statistical distribution will be biased towards overestimating the significance of the observed signal. Hence, we are more likely to make false positive errors and claim significance for a feature that is not, in fact, a QPO.
+
+We note that our QPO search of bursts from magnetar SGR J1550-5418 observed with Fermi/GBM did not seem to suffer from these problems. In part, this is due to the generally higher sensitivity of the instrument, leading to an increase of a factor of 10 in count rates. Additionally, the background in Fermi/GBM is higher than for RXTE, with $\sim 320 \, \mathrm{counts} \; \mathrm{s}^{-1}$ per detector in the $50 - 300 \, \mathrm{keV}$ energy range \citep{meegan2009}. This ensures that the periodogram at high frequencies follows the expected statistical distribution, and makes QPO searches using models of the periodogram feasible. Beyond that, it is possible that there are intrinsic differences between the two burst samples: perhaps bursts from the two magnetars considered here have intrinsically shorter rise times. It is also possible that this is an energy-dependent effect: Fermi/GBM observes at a higher energy range than RXTE. However, detailed modelling of rise times in dependence of energy would be necessary to answer this question, and is beyond the scope of this work.
+
+
+\section{Simulating Burst Light Curves}
+
+The results of Section \ref{sec:weakburstsims} make it clear that for short transient events observed with RXTE, the main assumption of the method used in \citet{huppenkothen13} no longer holds: even at high frequencies, the powers in the periodogram do not follow a $\chi^2$ distribution with two degrees of freedom around the underlying power spectral model. The simulations also show that we are far more likely to overestimate the significance of a signal due to a sharp rise and a low background than underestimate the significance. This is a problem that cannot easily be solved in the Fourier domain. Instead, the most straightforward way would be to model the burst light curves directly, and compare the periodogram of the observed data to the periodograms of realisations of the model. This, however, presents us with a new set of problems: there is no simple, straightforward way to model magnetar burst: indeed, the variety of shapes in the temporal domain originally prompted us in \citet{huppenkothen13} to consider power spectral models instead. However, in order to understand whether any of the candidate detections in Section \ref{sec:psd_individual} are real, simulations of light curves are essential. 
+
 \subsection{Light Curve Simulations of Candidate Detections}
 
-While the assumption of red noise at low frequencies and flat white noise at high frequencies is a good one at moderate to high count rates, this assumption begins to break down at the low count rates present in the RXTE data set. The combination of rapidly varying burst variability and low numbers of photons can have an intricate effect on the periodogram at high frequencies: neighbouring frequencies may be correlated, which, for the assumption of independent and identically distributed powers, can produce spurious QPO detections. In this regime, it is more rigorous if we can model light curves directly, taking advantage of the fact that they can in principle be decomposed into simple shapes.
+In order to simulate the light curves of bursts with candidate detections, we require two ingredients: (1) a simple, yet flexible model that can effectively encompass the large range of burst shapes observed in the data; (2) an algorithm that can efficiently traverse parameter space for the model we consider, and return samples from high-probability regions of that parameter space without too much human intervention. Below, we give a brief outline of a new method that satisfies both requirements, and will be described in more detail in a forthcoming paper.
 
 We model the light curve using the model defined in Equation \ref{eqn:spike model} as a superposition of individual spikes. Using a Poisson likelihood and hierarchical priors on the parameters, we construct a Bayesian model of the light curve, where the number of components of the type described in Equation \ref{eqn:spikemodel} is not known {\it a priori}. We then use diffusive nested sampling \citep{brewer2011} to sample the posterior distribution of parameters. From draws of this distribution, we simulate light curves using the appropriate Poisson statistics to account for the effects of the detector, and then create periodograms out of these light curves. These periodograms can then be directly compared to the periodogram of the observed data, such that we can create posterior p-values in much the same way as we have done for the periodogram simulations in \citep{huppenkothen13}. A full description of the method is beyond the scope of this paper, but will be described in detail in a forthcoming publication. 
 
 %%% PERHAPS BRENDON CAN WRITE  A SENTENCE ABOUT THE MODEL?
-
-\section{Results}
-\label{sec:results}
-
-
-\subsection{Individual Bursts}
-
-
-\subsubsection{Simulating Simple Burst Shapes}
-
-We simulated light curves - and the periodograms corresponding to those light curves - as described in Section \ref{sec:analysis_lcsims}. We simulate a large number of very simple bursts: one spike, with varying burst rise times, amplitudes and background count rates, in order to understand under which conditions the periodogram of a burst departs from the expected $\chi^2$ distribution even at high frequencies. We vary the rise time from $0.001 \, \mathrm{s}$ to $0.03 \, \mathrm{s}$, the background counts from $0.001$ counts per bin (corresponding to a background count rate of $\approx 5 \, \mathrm{counts}\, \,mathrm{s}^{-1}$) to $10$ counts per bin (corresponding to a count rate of $\approx 5 \times 10^{4}\, \mathrm{counts}\, \,mathrm{s}^{-1}$). The background for the PCA detector onboard of RXTE is approximately $$ %%% I AM HERE!
-
-
-- weird features in periodogram depend:
-	- on rise time
-
-	- very strongly on rise time: the shorter the rise time, the more high-frequency correlated powers there are
-	- the background count amplitude: if there's no background, essentially all my powers will be determined by the funky features in the spikes
-	- background determines chi-square powers at high frequencies!
-	- no dependency on burst amplitude
-	--> if I model simple white noise in dependence of background, I don't get those features! Really is a problem with the burst envelope!
-	- if there's no background, the spike power spectrum will "show through"
-	--> problem for RXTE because background much lower, while Fermi/GBM has enough background such that it's not a problem
-	
-plots:
-- p-values versus bin factors for 3 amplitudes and various rise times, once for weak background and once for strong background. 
-
-\subsection(Simulating Magnetar Burst Light Curves)
-	
-
-\subsection{Averaged Periodograms}
-
-- several signals
-- at least for psavg4 not significant when comparing with *randomly* averaged periodograms
-- two possibilities: -unmodelled effects present in many bursts (e.g. the non-Chi-square distributions)
-- or QPO present in many bursts
-- distribution seems peaky around 1000 Hz --> indicative of something systematic going on in the data? Perhaps some time scale I haven't modelled properly (e.g. rise times?)
-
---> can only test this with detailed burst models, which are in preparation, but not quite worked out yet. 
 
 
 \section{Discussion}
