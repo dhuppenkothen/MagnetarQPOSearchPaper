@@ -81,7 +81,15 @@ searched is not. Thus, the p-value needs to be corrected in order to reflect the
 $> 250 \hz$ such that only detections corresponding to a $4\sigma$ threshold ($p < 6.33 \times 10^{-5}$ for a single trial, or $p < 5.7 \times 10^{-9}$ taking into account all bursts and frequency resolutions) remain
 as candidates. Note that this latter procedure {\it only} concerns detections with frequencies above $> 250 \hz$, not detections with frequencies below.
 
-We find 15 candidate QPO detections in SGR 1900+14, and 15 candidates in SGR 1806+20 that meet our criteria for a QPO detection, with frequencies between $160\hz$ and $1900\hz$. 
+We find 15 candidate QPO detections in SGR 1900+14, and 15 candidates in SGR 1806+20 that meet our criteria for a QPO detection, with frequencies between $160\hz$ and $1900\hz$. Despite the fact that our algorithm
+flagged these features as significant and QPO-like, it is not clear whether these are, in fact QPOs. An examination of the burst periodograms reveals that the powers are not $\chi^2$ distributed even at high frequencies,
+a result confirmed by small probabilities when comparing the distributions of powers above $250 \hz$ with the theoretically expected distribution through a Kolmogorov-Smirnov test (see Figure \ref{fig:psd_individual_example} for
+an example). This implies that the comparison we are making between the data and the assumed probability model is not fair.
+
+It is not immediately clear what causes these irregularities in the periodogram at high frequencies: on the one hand, this is the frequency range where the spectrum should be dominated entirely by Poisson statistics,
+as was indeed the case for the bursts from SGR J1550-5418 observed with Fermi/GBM. On the other hand, these frequencies are still too low for dead time effects, described in more detail in \ref{sec:data}, to have an
+appreciable effect on the shape of the periodogram. It thus seems that there must be an intrinsic property of the bursts that leads to the observed deviations from the expected shape. This possibility will be further
+explored in Section \ref{sec:weakbursts}; an alternative QPO search on the bursts in question will be described in more detail in Section \ref{sec:dnest}
 
 
 %%% NEED SOME TEXT HERE
@@ -166,6 +174,7 @@ We note that all other potential QPOs flagged as significant by our Bayesian alg
 
 
 \section{Burst Periodograms in the Low-Noise Limit}
+\label{sec:weakbursts}
 
 While observations of magnetar bursts with RXTE suffer from less noise than those made with Fermi/GBM, the integrated number of photon counts over a burst is a factor of $10$ lower than for GBM. This means we are searching QPOs in the limit of low photon counts; the low number of photons can have an appreciable effect on the overall statistics. One effect may be a deviation from the expected statistical distributions, even at high frequencies. We thus explore the regime where this deviation becomes important via simulations of light curves with low photon counts, both of simple flat Poisson noise as well as of bursts.
 The overall simulation strategy is as follows:
@@ -215,7 +224,7 @@ We find that the deviations from the theoretically expected statistical distribu
 We note that our QPO search of bursts from magnetar SGR J1550-5418 observed with Fermi/GBM did not seem to suffer from these problems. In part, this is due to the generally higher sensitivity of the instrument, leading to an increase of a factor of 10 in count rates. Additionally, the background in Fermi/GBM is higher than for RXTE, with $\sim 320 \, \mathrm{counts} \; \mathrm{s}^{-1}$ per detector in the $50 - 300 \, \mathrm{keV}$ energy range \citep{meegan2009}. This ensures that the periodogram at high frequencies follows the expected statistical distribution, and makes QPO searches using models of the periodogram feasible. Beyond that, it is possible that there are intrinsic differences between the two burst samples: perhaps bursts from the two magnetars considered here have intrinsically shorter rise times. It is also possible that this is an energy-dependent effect: Fermi/GBM observes at a higher energy range than RXTE. However, detailed modelling of rise times in dependence of energy would be necessary to answer this question, and is beyond the scope of this work.
 
 
-\section{Simulating Burst Light Curves}
+\section{Burst Periodograms from Models of the Burst Light Curve}
 
 The results of Section \ref{sec:weakburstsims} make it clear that for short transient events observed with RXTE, the main assumption of the method used in \citet{huppenkothen13} no longer holds: even at high frequencies, the powers in the periodogram do not follow a $\chi^2$ distribution with two degrees of freedom around the underlying power spectral model. The simulations also show that we are far more likely to overestimate the significance of a signal due to a sharp rise and a low background than underestimate the significance. This is a problem that cannot easily be solved in the Fourier domain. Instead, the most straightforward way would be to model the burst light curves directly, and compare the periodogram of the observed data to the periodograms of realisations of the model. This, however, presents us with a new set of problems: there is no simple, straightforward way to model magnetar burst: indeed, the variety of shapes in the temporal domain originally prompted us in \citet{huppenkothen13} to consider power spectral models instead. However, in order to understand whether any of the candidate detections in Section \ref{sec:psd_individual} are real, simulations of light curves are essential. 
 
@@ -223,9 +232,21 @@ The results of Section \ref{sec:weakburstsims} make it clear that for short tran
 
 In order to simulate the light curves of bursts with candidate detections, we require two ingredients: (1) a simple, yet flexible model that can effectively encompass the large range of burst shapes observed in the data; (2) an algorithm that can efficiently traverse parameter space for the model we consider, and return samples from high-probability regions of that parameter space without too much human intervention. Below, we give a brief outline of a new method that satisfies both requirements, and will be described in more detail in a forthcoming paper.
 
-We model the light curve using the model defined in Equation \ref{eqn:spike model} as a superposition of individual spikes. Using a Poisson likelihood and hierarchical priors on the parameters, we construct a Bayesian model of the light curve, where the number of components of the type described in Equation \ref{eqn:spikemodel} is not known {\it a priori}. We then use diffusive nested sampling \citep{brewer2011} to sample the posterior distribution of parameters. From draws of this distribution, we simulate light curves using the appropriate Poisson statistics to account for the effects of the detector, and then create periodograms out of these light curves. These periodograms can then be directly compared to the periodogram of the observed data, such that we can create posterior p-values in much the same way as we have done for the periodogram simulations in \citep{huppenkothen13}. A full description of the method is beyond the scope of this paper, but will be described in detail in a forthcoming publication. 
+\label{sec:dnest}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=9cm]{example_burst_lcmodel_ps.png}
+\caption{.}
+\label{fig:burst_lcmodel_ps}
+\end{center}
+\end{figure}
 
-%%% PERHAPS BRENDON CAN WRITE  A SENTENCE ABOUT THE MODEL?
+
+We model the light curve using the model defined in Equation \ref{eqn:spike model} as a superposition of individual spikes. Using a Poisson likelihood and hierarchical priors on the parameters, we construct a Bayesian model of the light curve, where the number of components of the type described in Equation \ref{eqn:spikemodel} is not known {\it a priori}. We then use diffusive nested sampling \citep{brewer2011} to sample the posterior distribution of parameters, including the number of components. From draws of this distribution, we simulate light curves using the appropriate Poisson statistics to account for the effects of photon counting, and then create periodograms out of these light curves. These periodograms can then be directly compared to the periodogram of the observed data, such that we can create posterior p-values in much the same way as we have done for the periodogram simulations in \citep{huppenkothen13}. For each candidate burst, we create $10^6$ artificial light curves and consequently $10^6$ simulated periodograms. We fit each observed periodogram and simulated periodogram with a broken power law, and extract the maximum data/model outlier from both unbinned and binned periodograms. We restrict ourselves to the broken power law model, because the full model selection procedure would be too computationally expensive to run on each simulated periodogram. Choosing the more complex model in his case ensures that we are conservative: we are more likely to overfit the spectrum, and thus overfit a potential low-frequency, broad QPO feature, than under fit a broadband noise feature which will subsequently be falsely detected as a QPO. Since our initial search has not unearthed any low-frequency features that could easily be mistaken for QPOs by the broadband noise model, this is a safe choice.
+
+An example periodogram is shown in Figure \ref{fig:burst_lcmodel_ps}. We show both the periodogram of the burst itself, as well as contours of the $1\%$ and $99\%$ quantiles of the $10^6$ simulated periodograms. Especially at low frequencies, the deviations from the expected distributions are clearly visible: the shape of the periodogram at these frequencies is complex, with many features that could be mistaken for QPOs, and the distributions are very narrow, indicating a deterministic process dominates this part of the spectrum. At high frequencies, the spectrum evens out on average, but individual realisations of the burst may still have - and in fact do have - significant deviations from the expected distributions.
+
+%%% NEED TO WRITE SOME MORE ON THE RESULTS
 
 
 \section{Discussion}
