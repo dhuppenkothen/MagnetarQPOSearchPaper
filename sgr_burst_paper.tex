@@ -64,6 +64,26 @@ For details on the analysis procedure, including extensive simulations on simula
 \subsection{Individual Burst Search}
 \label{sec:psd_individual}
 
+We search a total of $558$ bursts from SGR 1900+14, and $229$ bursts observed with SGR 1806-20, excluding all bursts that saturated the detector or showed drop-outs in the light curve. 
+Each periodogram was corrected for dead time as explained in Section \ref{sec:data}. 
+For each burst, we first constructed a distribution of the likelihood ratio for a power law versus a broken power law model from $1000$ simulated periodograms using the simpler model, and
+chose the broken power law to model burst periodogram if the power law model was rejected at the $p < 0.05$ level. This is fairly conservative by design: we prefer to overfit a simple burst rather than underfit a periodogram 
+with complex structure, which may then be mis-attributed to a QPO feature. Subsequently, the selected broadband noise model was used to simulate $1000$ periodograms and build the
+distribution of data/model outliers, which we used to test for significant QPOs across the $50 - 2000 \hz$ frequency range. Smaller frequencies are discarded, because on these timescales the overall structure of
+the burst likely dominates the periodogram, and the broadband noise model no longer provides an adequate representation of the data. Any burst with a probability of $p < 5 \times 10^{-3}$ in at least two different frequency bins
+for observing the recorded maximum power under the assumption of pure noise is said to contain a candidate detection. For candidate QPOs with frequencies $> 250 \hz$, above which the distribution of powers
+should converge to the classically expected $\chi^2$ distribution with two degrees of freedom, we compute the classical p-value \citep{groth1975}, and thus avoid having to run large numbers of simulations, which 
+would quickly become prohibitively computationally expensive. 
+
+We refine the sample of candidate detections using this classical p-value for high-frequency candidates. Our initial p-value threshold of $p < 5 \times 10^{-3}$ is not very constraining, given that we search nearly $800$ bursts and 
+across $14$ different frequency resolutions. While the number of frequencies within a periodogram is automatically taken into account by the design of the method, the number of individual bursts and frequency resolutions
+searched is not. Thus, the p-value needs to be corrected in order to reflect the correct probability of observing a given event by chance. We adjust the threshold on the classical p-value for all candidates with frequencies
+$> 250 \hz$ such that only detections corresponding to a $4\sigma$ threshold ($p < 6.33 \times 10^{-5}$ for a single trial, or $p < 5.7 \times 10^{-9}$ taking into account all bursts and frequency resolutions) remain
+as candidates. Note that this latter procedure {\it only} concerns detections with frequencies above $> 250 \hz$, not detections with frequencies below.
+
+We find 15 candidate QPO detections in SGR 1900+14, and 15 candidates in SGR 1806+20 that meet our criteria for a QPO detection, with frequencies between $160\hz$ and $1900\hz$. 
+
+
 %%% NEED SOME TEXT HERE
 
 \begin{figure*}[htbp]
