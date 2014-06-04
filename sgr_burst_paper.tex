@@ -11,14 +11,14 @@
 %\let\siunitx\relax
 \newcommand{\com}[1]{\noindent\textcolor{red}{#1}}
 \newcommand{\hz}{\,\mathrm{Hz}}
-\shorttitle{Timing analysis of SGR J1550-5418}
+\shorttitle{Timing analysis of magnetars SGR 1806-20 and SGR 1900+14}
 \shortauthors{Huppenkothen et al.}
 
 \begin{document}
 
-\title{Quasi-Periodic Oscillations in Short Recurring Bursts of the Soft Gamma Repeaters SGR 1806-20 and SGR 1900+14 Observed With RXTE}
+\title{Quasi-Periodic Oscillations in Short Recurring Bursts of the magnetars SGR 1806-20 and SGR 1900+14 Observed With RXTE}
 
-\author{D. Huppenkothen\altaffilmark{1, 2}, Lucy Heil\altaffilmark{1}, A. L. Watts\altaffilmark{1},  E. G{\"o}{\u g}{\"u}{\c s}\altaffilmark{3}, Y. Kaneko\altaffilmark{3}}
+\author{D. Huppenkothen\altaffilmark{1, 2}, L. Heil\altaffilmark{1}, A. L. Watts\altaffilmark{1},  E. G{\"o}{\u g}{\"u}{\c s}\altaffilmark{3}}
 
  
 \altaffiltext{1}{Astronomical Institute ``Anton Pannekoek'', University of
@@ -253,15 +253,19 @@ In order to simulate the light curves of bursts with candidate detections, we re
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=9cm]{example_burst_lcmodel_ps.png}
-\caption{.}
+\caption{Example of a burst periodogram (black) and periodograms of simulated light curves, produced as described in the text. We show the mean out of $10^6$ simulations as the red line; the shaded area encloses the $1\%$ and $99\%$ quantiles. At low frequencies, the irregular shape
+of the periodogram due to the overall burst morphology is evident, It is reproduced well by the simulations.}
 \label{fig:burst_lcmodel_ps}
 \end{center}
 \end{figure}
 
 
-We model the light curve using the model defined in Equation \ref{eqn:spike model} as a superposition of individual spikes. Using a Poisson likelihood and hierarchical priors on the parameters, we construct a Bayesian model of the light curve, where the number of components of the type described in Equation \ref{eqn:spikemodel} is not known {\it a priori}. We then use diffusive nested sampling \citep{brewer2011} to sample the posterior distribution of parameters, including the number of components. From draws of this distribution, we simulate light curves using the appropriate Poisson statistics to account for the effects of photon counting, and then create periodograms out of these light curves. These periodograms can then be directly compared to the periodogram of the observed data, such that we can create posterior p-values in much the same way as we have done for the periodogram simulations in \citep{huppenkothen2013}. For each candidate burst, we create $10^6$ artificial light curves and consequently $10^6$ simulated periodograms. We fit each observed periodogram and simulated periodogram with a broken power law, and extract the maximum data/model outlier from both unbinned and binned periodograms. We restrict ourselves to the broken power law model, because the full model selection procedure would be too computationally expensive to run on each simulated periodogram. Choosing the more complex model in his case ensures that we are conservative: we are more likely to overfit the spectrum, and thus overfit a potential low-frequency, broad QPO feature, than under fit a broadband noise feature which will subsequently be falsely detected as a QPO. Since our initial search has not unearthed any low-frequency features that could easily be mistaken for QPOs by the broadband noise model, this is a safe choice.
+We model the light curve using the model defined in Equation \ref{eqn:spike model} as a superposition of individual spikes. Using a Poisson likelihood and hierarchical priors on the parameters, we construct a Bayesian model of the light curve, where the number of components of the type described in Equation \ref{eqn:spikemodel} is not known {\it a priori}. We then use diffusive nested sampling \citep{brewer2011} to sample the posterior distribution of parameters, including the number of components. The details of this method will be reported in a forthcoming paper (Huppenkothen et al, in prep). From draws of this distribution, we simulate light curves using the appropriate Poisson statistics to account for the effects of photon counting, and then create periodograms out of these light curves. These periodograms can then be directly compared to the periodogram of the observed data, such that we can create posterior p-values in much the same way as we have done for the periodogram simulations in \citep{huppenkothen2013}. For each candidate burst, we create $10^6$ artificial light curves and consequently $10^6$ simulated periodograms. We fit each observed periodogram and simulated periodogram with a broken power law, and extract the maximum data/model outlier from both unbinned and binned periodograms. We restrict ourselves to the broken power law model, because the full model selection procedure would be too computationally expensive to run on each simulated periodogram. Choosing the more complex model in his case ensures that we are conservative: we are more likely to overfit the spectrum, and thus overfit a potential low-frequency, broad QPO feature, than under fit a broadband noise feature which will subsequently be falsely detected as a QPO. Since our initial search has not unearthed any low-frequency features that could easily be mistaken for QPOs by the broadband noise model, this is a safe choice.
 
 An example periodogram is shown in Figure \ref{fig:burst_lcmodel_ps}. We show both the periodogram of the burst itself, as well as contours of the $1\%$ and $99\%$ quantiles of the $10^6$ simulated periodograms. Especially at low frequencies, the deviations from the expected distributions are clearly visible: the shape of the periodogram at these frequencies is complex, with many features that could be mistaken for QPOs, and the distributions are very narrow, indicating a deterministic process dominates this part of the spectrum. At high frequencies, the spectrum evens out on average, but individual realisations of the burst may still have - and in fact do have - significant deviations from the expected distributions.
+
+We apply this method to all $30$ candidate detections described in Section \ref{sec:psd_individual} in order to confirm or reject the presence of any QPOs in individual magnetar burst periodograms. We compute distributions for the maximum data/model outlier for various binning factors, in order to be able to test whether an observed power is an outlier compared to this distribution, and compute the posterior p-value that this might be the case for each periodogram and binning factor. 
+We find four very marginal QPOs, three in bursts from SGR 1806-20, one in a burst from SGR 1900+14. However, none of these candidates have a p-value $p < 10^{-3}$. Given the number of bursts searched, we cannot consider any of these candidates significant detections.
 
 %%% NEED TO WRITE SOME MORE ON THE RESULTS
 
@@ -270,9 +274,14 @@ An example periodogram is shown in Figure \ref{fig:burst_lcmodel_ps}. We show bo
 \label{sec:discussion}
 
 NEED TO INCLUDE:
-- Discussion Fermi/GBM versus RXTE ----> Why we need Fermi/GBM
-- improvement of light curve methods over standard assumption of red noise, but problem with detecting low-frequency signals in this method
-- contrast with El-Mezeini results again
+
+Discussion Fermi/GBM versus RXTE: Why we need Fermi/GBM
+
+
+improvement of light curve methods over standard assumption of red noise, but problem with detecting low-frequency signals in this method
+
+
+ contrast with El-Mezeini results again
 
 \section{Conclusions}
 
