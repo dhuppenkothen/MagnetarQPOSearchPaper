@@ -5,31 +5,49 @@
 \deftab720
 \pard\pardeftab720
 
-\f0\fs26 \cf2 We thank the referee for their very insightful and useful comments, which we seek to address in full below.\'a0\
+\f0\fs26 \cf2 We thank the referee for their very insightful and useful comments, which we seek to address in full below.\'a0All changes in the revised version are marked in bold; a new Figure 3 has been added; consequently all old Figures 3-6 have been shifted one up.\
 \
->1. Section 3. The paper says: "Note that stationarity does not imply a constant light curve: it >merely implies that the variance in the light curve over any given time interval must be the >same as over any other interval." This is not quite right, as one expects random fluctuations >in the sample variance even for stationary random processes. It might be worth pointing out >that stationarity involves the average properties of the variance, and that the time intervals >should be of the same length.\'a0\
+>1. Section 3. The paper says: "Note that stationarity does not imply a constant light curve: it \
+>merely implies that the variance in the light curve over any given time interval must be the \
+>same as over any other interval." This is not quite right, as one expects random fluctuations \
+>in the sample variance even for stationary random processes. It might be worth pointing out \
+>that stationarity involves the average properties of the variance, and that the time intervals \
+>should be of the same length.\'a0\
 \
-RESPONSE: We have amended the text to make it more precise in the way suggested. Our aim with this sentence was to point out to those readers with perhaps not a strong background in time series analysis that stationarity does not imply an absence of variability.\
+RESPONSE: We have amended the text to make it more precise in the way suggested. Our aim with this sentence was to point out to those readers with perhaps not a strong background in time series analysis that stationarity does not imply an absence of intrinsic variability beyond that induced by Poisson statistics.\
 \
->2. Section 3.1. "This is fairly conservative by design: we prefer to overfit a simple burst >rather than underfit a periodogram with complex structure" - why not fit all bursts with the\'a0\
-> broken power law model? That gives an even treatment to all data, avoids underfitting, and > simplifies the computation.\
+>2. Section 3.1. "This is fairly conservative by design: we prefer to overfit a simple burst \
+>rather than underfit a periodogram with complex structure" - why not fit all bursts with the\'a0\
+> broken power law model? That gives an even treatment to all data, avoids underfitting, and \
+> simplifies the computation.\
 \
 RESPONSE:\'a0The original reasoning for including a model selection step in the analysis was an interest in the variability properties beyond searching for QPOs. In Huppenkothen et al (2014) we studied the broadband noise properties along with a QPO search. Here, we kept the method identical to provide consistency and comparability with this previous work. Additionally, while we have opted to restrict ourselves to a QPO search only, we intend to study the overall variability properties in a future work. \
 \
 \
-3. Section 3.1. "across 14 different frequency resolutions" - I would like to see this explained a bit more. How were these decided and how were they used?\
+> 3. Section 3.1. "across 14 different frequency resolutions" - I would like to see this explained a bit more. \
+> How were these decided and how were they used?\
 \
 RESPONSE: We added a paragraph to describe the frequency binning in more detail.\'a0\
 \
 \
-4. Section 3.1. "(p < 6.33 x 10^-5 for a single trial, or p < 5.7 x 10^-9 taking into account all bursts and frequency resolutions)" - are these the wrong way round?\
+> 4. Section 3.1. "(p < 6.33 x 10^-5 for a single trial, or p < 5.7 x 10^-9 taking into account all bursts and \
+> frequency resolutions)" - are these the wrong way round?\
 \
 RESPONSE: Indeed they are. This has been fixed.\
 \
-5. Section 3.2. I would like to see an example of one or two of the good "clusters" discussed in this section. Perhaps the data for SGR 1806-20 showing the detection, and one other showing no detection.\'a0\
+>5. Section 3.2. I would like to see an example of one or two of the good "clusters" discussed in this section. Perhaps the \
+>data for SGR 1806-20 showing the detection, and one other showing no detection.\'a0\
 \
+RESPONSE: We have added a new Figure 3 to illustrate an averaged periodogram with the candidate detection that remained significant throughout all tests versus an averaged periodogram without detection.\
 \
->6. Section 3.2. In general the average periodogram will depend on how the individual >periodograms were normalized. Were they computed in the Leahy system then averaged? >Or in the rms/flux system then averaged? In the former case, a brighter burst will have larger >Fourier amplitudes (at low frequencies where the burst variance is higher than the Poisson >noise) and will dominate the average. This can affect the mean and the distribution of >powers. The way that the bursts are normalized prior to averaging (=weighted) needs to be >treated carefully; there is no "best" way to normalize the periodograms of bursts with >different durations and count rates.\
+>6. Section 3.2. In general the average periodogram will depend on how the individual\
+>periodograms were normalized. Were they computed in the Leahy system then averaged? \
+>Or in the rms/flux system then averaged? In the former case, a brighter burst will have larger \
+>Fourier amplitudes (at low frequencies where the burst variance is higher than the Poisson \
+>noise) and will dominate the average. This can affect the mean and the distribution of \
+>powers. The way that the bursts are normalized prior to averaging (=weighted) needs to be \
+>treated carefully; there is no "best" way to normalize the periodograms of bursts with \
+>different durations and count rates.\
 \
 RESPONSE: We were aware of this problem during the analysis. This is one of the reasons why we checked all individual bursts for signals that may have dominated the average, and only accepted a candidate signal as potential QPO if it was significant against random samples of bursts also. \'a0\
 \
@@ -43,9 +61,9 @@ RESPONSE: To our knowledge, there exists no systematic exploration of the power 
 \
 \
 \
-9. Figure 6. This could be replotted with a reduced range of powers, e.g. 0.1-1000. There is no need to show the very low power range where there is no data.\
+>9. Figure 6. This could be replotted with a reduced range of powers, e.g. 0.1-1000. There is no need to show the very low >power range where there is no data.\
 \
-\
+RESPONSE: This figure (now Figure 6 due to addition of a new Figure 3 above) has been replotted in a narrower frequency range.\
 \
 10. Section 5. Is it possible to elaborate a little more on the Bayesian method? What are the priors, how are they justified, and how sensitive are the results to the choice of priors?\
 \
