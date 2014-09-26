@@ -27,22 +27,7 @@ from pylab import *
 rc("font", size=20, family="serif", serif="Computer Sans")
 rc("text", usetex=True)
 
-### Gather and make a dictionary with all results:
-def make_alldict(alldict_filename="sgr1900_alldict.dat"):
 
-    burstfiles = rxteburst.search_filenames_recursively("./", "*burstfile.dat")
-    for b in burstfiles:
-        try:
-            shutil.copy(b, "./")
-        except:
-            continue
-    alldict = sample_analysis.bursts_after_analysis()
-
-    f = open(alldict_filename, "w")
-    pickle.dump(alldict, f)
-    f.close()
-
-    return alldict
 
 
 
@@ -51,7 +36,7 @@ def data_times(datadir="./", data_expression="*.asc", froot="sgr1900"):
     """
      This function takes all data files and reads out the start and tstop times of the file,
      such that I only have to read in *all* the data files once, and can then use the results
-     for extracting bursts from the right data file.
+     for extdaaracting bursts from the right data file.
     """
 
     filenames = rxteburst.search_filenames_recursively(datadir, data_expression)
@@ -81,6 +66,22 @@ def data_times(datadir="./", data_expression="*.asc", froot="sgr1900"):
     fout.close()
     return
 
+### Gather and make a dictionary with all results:
+def make_alldict(datadir = "./", alldict_filename="sgr1900_alldict.dat"):
+
+    burstfiles = gt.search_filenames_recursively(datadir, "*burstfile.dat")
+    for b in burstfiles:
+        try:
+            shutil.copy(b, "./")
+        except:
+            continue
+    alldict = sample_analysis.bursts_after_analysis(datadir)
+
+    f = open(alldict_filename, "w")
+    pickle.dump(alldict, f)
+    f.close()
+
+    return alldict
 
 
 ### Pull out significant signals automatically:
@@ -723,10 +724,10 @@ def fit_burst_lightcurve(lc, samplefile, fnyquist=2048.0, froot="test", p_thresh
         distfig = figure(figsize=(12,9))
         distax = distfig.add_subplot(111)
         print("psims: " + str(psims))
-	pmin = np.min(psims)
-	pmax = np.max(psims)
-	print("pmin: %f"%pmin)
-	print("pmax: %f"%pmax)
+        pmin = np.min(psims)
+        pmax = np.max(psims)
+        print("pmin: %f"%pmin)
+        print("pmax: %f"%pmax)
         n,bins,patches = hist(psims, range=[pmin, pmax],bins=30, color="cyan", histtype="stepfilled")
         vlines(pdata, 0, np.max(n), lw=3, linestyle='dashed', color="black")
         xlabel("Maximum Leahy Power", fontsize=24)
@@ -751,15 +752,12 @@ def fit_burst_lightcurve(lc, samplefile, fnyquist=2048.0, froot="test", p_thresh
     return pvals_all
 
 
-def dnest_significances(index, nbursts, p_threshold=0.001, lcmodel=True):
+def dnest_significances(datadir="./", p_threshold=0.001, lcmodel=True):
 
-    posterior_files = glob.glob("*posterior*.txt")
+    posterior_files = glob.glob(datadir+"*posterior*.txt")
     print("posterior files 0-8 " + str(posterior_files))
 
-    files_to_analyse = posterior_files[index*nbursts:(index+1)*nbursts]
-    print("files to analyse: " + str(files_to_analyse))
-
-    for f in files_to_analyse:
+    for f in posterior_files:
         fsplit = f.split("_")
 
         datafile = "%s_%s_data.dat"%(fsplit[0], fsplit[1])
@@ -925,9 +923,9 @@ def average_periodograms(nfolder, fnyquist=2048.0, froot="sgr1900"):
         pickle.dump(psnew, fout)
         fout.close()
 
-def run_average_periodograms(niter=500, nchain=500, nsim=10000, fitmethod="bfgs"):
+def run_average_periodograms(datadir="./", niter=500, nchain=500, nsim=10000, fitmethod="bfgs"):
 
-    psavgfiles = rxteburst.search_filenames_recursively("./", "*psavg*reduced.dat")
+    psavgfiles = gt.search_filenames_recursively(datadir, "*psavg*.dat")
     print("psavgfiles: " + str(psavgfiles))
 
     for f in psavgfiles:
@@ -935,7 +933,7 @@ def run_average_periodograms(niter=500, nchain=500, nsim=10000, fitmethod="bfgs"
         m = ps.m
         fname = f.split("/")[-1]
         fsplit = fname.split("_")
-        namestr = ""
+        namestr = datadir
         for fs in fsplit[:-1]:
             namestr += fs + "-"
         namestr += fsplit[-1][:-4]
@@ -971,7 +969,7 @@ def run_average_periodograms(niter=500, nchain=500, nsim=10000, fitmethod="bfgs"
     return
 
 
-def sgr1900_psavg_results():
+def sgr1900_psavg_results(datadir="./"):
 
     """
     Requires averaged periodograms of file names sgr1900_psavg[n].dat, where n is a number
@@ -1037,7 +1035,7 @@ def sgr1900_psavg_results():
     nbins_all = [nbins4, nbins5, nbins9, nbins10, nbins11, nbins12, nbins13, nbins14]
 
     for psfile, m, flist, plist, nlist in zip(psavg_no, m_all, freq_all, pmax_all, nbins_all):
-        ps = gt.getpickle("sgr1900_psavg%i.dat"%psfile)
+        ps = gt.getpickle(datadir+"sgr1900_psavg%i.dat"%psfile)
 
         figure(figsize=(12,9))
         loglog(ps.freq[1:], ps.ps[1:], lw=2, color="black", linestyle="steps-mid")
@@ -1045,7 +1043,7 @@ def sgr1900_psavg_results():
         xlabel("Frequency [Hz]", fontsize=20)
         ylabel("Averaged Leahy Power", fontsize=20)
         title("Averaged periodogram %i, unbinned, combining %i periodograms" %(psfile, m))
-        savefig("sgr1900_psavg%i_ps.eps"%psfile, format="eps")
+        savefig(datadir+"sgr1900_psavg%i_ps.eps"%psfile, format="eps")
         close()
 
 
@@ -1084,7 +1082,7 @@ def sgr1900_psavg_results():
 
             legend(loc="upper right", prop={"size":15})
 
-            savefig("sgr1900_psavg%i_b%i_ps.png"%(psfile, n), format="png")
+            savefig(datadir+"sgr1900_psavg%i_b%i_ps.png"%(psfile, n), format="png")
             close()
 
     return

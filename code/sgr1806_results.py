@@ -8,7 +8,7 @@ import sgr1900_results
 
 from pylab import *
 
-def psavg_results(posterior_means=None, plot_lc=True):
+def psavg_results(datadir="./", plot_lc=True):
 
     """
     Get results out of averaged periodograms for SGR1806-20.
@@ -20,9 +20,9 @@ def psavg_results(posterior_means=None, plot_lc=True):
 
 
     for nf in nfolder:
-        psavg = gt.getpickle("sgr1806_psavg%i.dat"%nf)
+        psavg = gt.getpickle(datadir+"sgr1806_psavg%i.dat"%nf)
 
-        psavg_resdict = gt.getpickle("sgr1806-psavg%i_resdict.dat"%nf)
+        psavg_resdict = gt.getpickle(datadir+"sgr1806-psavg%i_resdict.dat"%nf)
 
 
         pvals = np.array([([int(i) for i in k if i.isdigit()],p) for k,p in
